@@ -1,5 +1,9 @@
 function Get-SecAdminAccounts
 {
+    [CmdletBinding()]
+    param(
+        [Switch]$CreateBaseline
+    )
     
     <#
       Synopsis
@@ -10,7 +14,7 @@ function Get-SecAdminAccounts
     $filename = Get-DateISO8601 -Prefix "Admin-Report" -Suffix ".xml"
     
     Get-ADGroupMember -Identity administrators | Export-Clixml $filename
-    if(-NOT(Test-Path ".\Baselines\Admin-Baseline.xml"))
+    if($CreateBaseline)
     {
 	    Rename-Item $filename "$computer-Integrity-Baseline.xml"
 	    Move-Item ".\$computer-Integrity-Baseline.xml" .\Baselines
