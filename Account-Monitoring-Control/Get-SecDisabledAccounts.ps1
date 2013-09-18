@@ -1,9 +1,14 @@
-﻿function Get-SecDisabledAccounts {
+function Get-SecDisabledAccounts {
+
+    [CmdletBinding()]
+    param(
+        [Switch]$CreateBaseline
+    )
 
     $filename = Get-DateISO8601 -Prefix "Disabled-Accounts" -Suffix ".xml"
     
     Search-ADAccount -AccountDisabled | Export-Clixml $filename
-    if(-NOT(Test-Path ".\Baselines\Disabled-Baseline.xml"))
+    if($CreateBaseline)
     {
 	    Rename-Item $filename "Disabled-Baseline.xml"
 	    Move-Item ".\Disabled-Baseline.xml" .\Baselines
