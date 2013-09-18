@@ -1,5 +1,9 @@
 function Get-SecDeviceInventory 
 {
+    [CmdletBinding()]
+    param(
+        [Switch]$CreateBaseline
+    )
 
 
      <#
@@ -31,7 +35,7 @@ function Get-SecDeviceInventory
     }
     Export-Clixml -InputObject $list -Path $filename
     
-    if(-NOT(Test-Path ".\Baselines\Device-Inventory-Baseline.xml"))
+    if($CreateBaseline)
 	    {
 		    Rename-Item $filename "Device-Inventory-Baseline.xml"
             Move-Item ".\Device-Inventory-Baseline.xml" .\Baselines
