@@ -1,9 +1,14 @@
-﻿function Get-SecAccountsThatExpire {
+function Get-SecAccountsThatExpire {
+    
+    [CmdletBinding()]
+    param(
+        [Switch]$CreateBaseline
+    )
     
     $filename = Get-DateISO8601 -Prefix "Expired" -Suffix ".xml"
     Search-ADAccount -AccountExpired | Export-Clixml .\$filename
     
-    if(-NOT(Test-Path ".\Baselines\Expired-Baseline.xml"))
+    if($CreateBaseline)
     {
 	    Rename-Item $filename "Expired-Baseline.xml"
 	    Move-Item ".\Expired-Baseline.xml" .\Baselines
