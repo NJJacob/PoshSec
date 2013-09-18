@@ -1,8 +1,13 @@
-﻿function Get-SecLockedOutAccounts {
+function Get-SecLockedOutAccounts {
+
+    [CmdletBinding()]
+    param(
+        [Switch]$CreateBaseline
+    )
  
     $filename = Get-DateISO8601 -Prefix "Locked-Out" -Suffix ".xml"
     Search-ADAccount -LockedOut | Export-Clixml .\$filename
-    if(-NOT(Test-Path ".\Baselines\Locked-Baseline.xml"))
+    if($CreateBaseline)
     {
 	    Rename-Item $filename "Locked-Baseline.xml"
 	    Move-Item ".\Locked-Baseline.xml" .\Baselines
